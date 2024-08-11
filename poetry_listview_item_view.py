@@ -1,3 +1,12 @@
+"""
+@Project : ListView
+@File    : poetry_listview_item_view.py
+@IDE     : PyCharm
+@Author  : libai
+@Email   : stayhungrystayfoolish52@gmail.com
+@Date    : 2024/8/11 11:11 PM
+"""
+
 from tkinter import Frame
 from tkinter import Label
 from tkinter import PhotoImage

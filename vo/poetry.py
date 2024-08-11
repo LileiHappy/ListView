@@ -1,3 +1,13 @@
+"""
+@Project : ListView
+@File    : poetry.py
+@IDE     : PyCharm
+@Author  : libai
+@Email   : stayhungrystayfoolish52@gmail.com
+@Date    : 2024/8/11 11:11 PM
+"""
+
+
 class Poetry:
     def __init__(self, title, author, main_text, publish_time, address, subtitle=None, introduce=None, collection=None,
                  recite_progress=0, art_picture_path=None):
