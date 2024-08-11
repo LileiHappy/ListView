@@ -7,7 +7,7 @@ from threading import Timer
 from resource.colors import theme
 import os
 
-DELAY_UPDATE_DURATION = 5
+DELAY_UPDATE_DURATION = 6
 
 
 class PoetryListView:
