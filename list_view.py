@@ -10,6 +10,8 @@ class ListView(Frame):
             self.__width = kwargs['width']
         if 'height' in kwargs.keys():
             self.__height = kwargs['height']
+        if 'background' in kwargs.keys():
+            self.__background = kwargs['background']
         self.__adapter = adapter
         self.__create_view()
         self.__configure()
@@ -22,12 +24,10 @@ class ListView(Frame):
         self.__item_count = adapter.get_count()
         self.__item_height = adapter.get_item_height(0)
         self.__update_scroll_region()
-        # self.__damping_factor = 1.0
-        # self.__release_velocity = 0
         self.__invalidate_view()
 
     def __create_view(self):
-        self.__canvas = Canvas(self, width=self.__width, highlightthickness=0, background='white')
+        self.__canvas = Canvas(self, width=self.__width, highlightthickness=0, background=self.__background)
         self.__scroll_bar = Scrollbar(self, orient='vertical', command=self.__intercept_scroll_may)
 
     def __intercept_scroll_may(self, *args):
@@ -43,7 +43,6 @@ class ListView(Frame):
 
     def __bind_event(self):
         self.__canvas.bind('<Configure>', self.__canvas_configure)
-        # self.__canvas.bind('<ButtonRelease-1>', self.__on_release)
         self.__canvas.bind_all('<MouseWheel>', self.__on_mouse_wheel)
 
     def __canvas_configure(self, event):
@@ -55,41 +54,14 @@ class ListView(Frame):
             self.__canvas.yview_scroll(-1, 'units')
         elif event.delta < 0:
             self.__canvas.yview_scroll(1, 'units')
-        # self.__check_scroll_bound()
         self.__invalidate_view()
-
-    # def __check_scroll_bound(self):
-    #     top_y = self.__canvas.yview()[0]
-    #     bottom_y = self.__canvas.yview()[1]
-    #     if top_y <= 0.0:
-    #         self.__damping_factor += 0.1
-    #     if bottom_y >= 1.0:
-    #         self.__damping_factor += 0.1
 
     def __on_scroll(self, event):
         self.__invalidate_view()
 
-    # def __on_release(self, event):
-    #     self.__perform_bounce_effect()
-
     def __update_scroll_region(self):
         total_height = self.__item_height * self.__item_count
         self.__canvas.configure(scrollregion=(0, 0, 1, total_height))
-
-    # def __perform_bounce_effect(self):
-    #     top_y = self.__canvas.yview()[0]
-    #     bottom_y = self.__canvas.yview()[1]
-    #     target_y = 0.0 if top_y < 0.5 else 1.0
-    #     distance = target_y - bottom_y
-    #     self.__release_velocity = distance * 10 * self.__damping_factor
-
-    # def __apply_bounce_animation(self):
-    #     if abs(self.__release_velocity) > 0.01:
-    #         self.__canvas.yview_scroll(int(self.__release_velocity), "units")
-    #         self.__release_velocity *= 0.9  # Damping effect
-    #         self.after(10, self.__apply_bounce_animation)
-    #     else:
-    #         self.__damping_factor = 1.0  # Reset damping factor
 
     def __invalidate_view(self):
         if self.__item_count <= 0:
@@ -137,8 +109,8 @@ class ListView(Frame):
 
     def update_item_view(self, index):
         if index == -1:
-            if self.__item_count == 0:
-                self.__item_count = self.__adapter.get_count()
+            self.__item_count = self.__adapter.get_count()
+            self.__update_scroll_region()
             self.__invalidate_view()
             return
         visible_index_top, visible_index_bottom = self.__get_visible_items_index_range()
